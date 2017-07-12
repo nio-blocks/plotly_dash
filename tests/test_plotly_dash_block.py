@@ -12,8 +12,8 @@ class TestExample(NIOBlockTestCase):
     @patch('dash.Dash')
     def test_process_signals(self, mock_dash, mock_graph, mock_div):
         input_signals = [
-            Signal({'title': '1', 'data': {'foo1': 'bar1'}}),
-            Signal({'title': '2', 'data': {'foo2': 'bar2'}})]
+            Signal({'title': '1', 'data': [{'foo1': 'bar1'}]}),
+            Signal({'title': '2', 'data': [{'foo2': 'bar2'}]})]
         graph_instances = [MagicMock(), MagicMock()]
         mock_graph.side_effect = graph_instances
         blk = PlotlyDash()
