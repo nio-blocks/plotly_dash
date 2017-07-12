@@ -31,7 +31,8 @@ class PlotlyDash(Block):
     def process_signals(self, signals):
         graphs = []
         for signal in signals:
-            graphs.append(dcc.Graph(id=signal.title, figure={'data': signal.data, 'layout': {'title': signal.title}}))
+            figure = {'data': signal.data, 'layout': {'title': signal.title}}
+            graphs.append(dcc.Graph(id=signal.title, figure=figure))
         self.app.layout = html.Div(children=graphs)
         self.logger.debug('displaying {} graphs '.format(len(graphs)))
 
