@@ -29,9 +29,11 @@ class TestExample(NIOBlockTestCase):
         # Graph() is instantiated for each signal
         self.assertEqual(mock_graph.call_count, len(input_signals))
         graph_args = [args[1] for args in mock_graph.call_args_list]
-        for arg in graph_args:
-            # todo: assert actual values instead of ANY
-            self.assertDictEqual({'id': ANY, 'figure': {'data': ANY, 'layout': {'title': ANY}}}, arg)
+        for signal in input_signals:
+            expected_arg = {'figure': {'data': signal.data,
+                                       'layout': {'title': signal.title}},
+                            'id': signal.title}
+            self.assertTrue(expected_arg in graph_args)
         # Div() is instantiated with instanvces of Graph()
         self.assertTrue(mock_div.call_count)
         self.assertEqual(mock_div.call_args[1]['children'], graph_instances)
