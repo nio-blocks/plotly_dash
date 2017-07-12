@@ -23,9 +23,9 @@ class TestExample(NIOBlockTestCase):
         blk.stop()
 
         # Dash() is instantiated
-        self.assertTrue(mock_dash.call_count)
+        self.assertEqual(mock_dash.call_count, 1)
         # server is started
-        self.assertTrue(mock_dash.return_value.run_server.call_count)
+        self.assertEqual(mock_dash.return_value.run_server.call_count, 1)
         # Graph() is instantiated for each signal
         self.assertEqual(mock_graph.call_count, len(input_signals))
         graph_args = [args[1] for args in mock_graph.call_args_list]
@@ -34,6 +34,8 @@ class TestExample(NIOBlockTestCase):
                                        'layout': {'title': signal.title}},
                             'id': signal.title}
             self.assertTrue(expected_arg in graph_args)
-        # Div() is instantiated with instanvces of Graph()
-        self.assertTrue(mock_div.call_count)
-        self.assertEqual(mock_div.call_args[1]['children'], graph_instances)
+        # Div() is instantiated twice, in start() and process_signals()
+        self.assertEqual(mock_div.call_count, 2)
+        # our instances of Graph() are passed when process_signals() is called
+        self.assertEqual(mock_div.call_args_list[-1][1]['children'],
+                         graph_instances)
