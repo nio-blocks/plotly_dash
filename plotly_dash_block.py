@@ -1,6 +1,7 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.dependencies import Input, Output, Event
 
 from nio.block.base import Block
 from nio.properties import VersionProperty, FloatProperty, Property, \
@@ -9,6 +10,7 @@ from nio.util.threading.spawn import spawn
 
 
 class PlotlyDash(Block):
+
 
     version = VersionProperty('0.1.0')
     title = StringProperty(
@@ -26,6 +28,7 @@ class PlotlyDash(Block):
     def __init__(self):
         self._main_thread = None
         self.app = dash.Dash()
+        self.app.config.supress_callback_exceptions=True
         self.data = {
             "x": [],
             "y": []
@@ -36,6 +39,20 @@ class PlotlyDash(Block):
         self._main_thread = spawn(self._server)
         self.logger.debug('server started on localhost:8050')
         super().start()
+
+        figure = {'data': [self.data], 'layout': {'title': self.title()}}
+        self.app.layout = html.Div(
+            [dcc.Graph(id=self.title(), figure=figure),
+            dcc.Interval(
+                id='interval-component',
+                interval=1 * 1000  # in milliseconds
+            )]
+        )
+        @self.app.callback(Output(self.title(), 'figure'),
+                           events=[Event('interval-component', 'interval')])
+        def update_graph_live():
+            return {'data': [self.data], 'layout': {'title': self.title()}}
+
 
     def stop(self):
         try:
@@ -56,9 +73,6 @@ class PlotlyDash(Block):
                 self.data["y"].append(self.y_axis(signal))
                 self.data["x"] = self.data["x"][1:]
                 self.data["y"] = self.data["y"][1:]
-            figure = {'data': [self.data], 'layout': {'title': self.title()}}
-            graphs.append(dcc.Graph(id=self.title(), figure=figure))
-        self.app.layout = html.Div(children=graphs)
         self.logger.debug('displaying {} graphs '.format(len(graphs)))
 
     def _server(self):
