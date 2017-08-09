@@ -1,7 +1,7 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output, Event
+from dash.dependencies import Output, Event
 
 from nio.block.base import Block
 from nio.properties import VersionProperty, FloatProperty, Property, \
@@ -12,14 +12,8 @@ from nio.util.threading.spawn import spawn
 class Series(PropertyHolder):
     y_axis = FloatProperty(
         title='Dependent Variable', default='{{ $y_data }}', allow_none=False)
-    name = StringProperty(title='Series Name', default='', allow_none=False)
-    # kwargs = Property(title='Series Configurables', default='{{ {} }}')
-
-
-# class Graphs(PropertyHolder):
-#     id = Property(title='Graph Title', default='')
-#     series = ListProperty(Series, title='Series', default=[])
-
+    name = StringProperty(
+        title='Series Name', default='default name', allow_none=False)
 
 class PlotlyDash(Block):
 
@@ -35,7 +29,6 @@ class PlotlyDash(Block):
     num_data_points = IntProperty(
         title='How many points to display', default=20, allow_none=True)
 
-    # Does __init__ run when block is put in designer or on service start?
     def __init__(self):
         self._main_thread = None
         self.app = dash.Dash()
@@ -49,7 +42,10 @@ class PlotlyDash(Block):
         self.logger.debug('server started on localhost:8050')
         super().start()
 
-        self.data_dict = {s.name(): {'x': [], 'y': [], 'name': s.name()} for s in self.graph_series()}
+        self.data_dict = {
+            s.name(): {'x': [], 'y': [], 'name': s.name()}
+            for s in self.graph_series()
+        }
         self.data = self.data_dict_to_data_list(self.data_dict)
         figure = {'data': self.data, 'layout': {'title': self.title()}}
         app_layout = [
@@ -77,14 +73,21 @@ class PlotlyDash(Block):
         # append new signal data to the proper dict key
         for signal in signals:
             for series in self.graph_series():
-                if len(self.data_dict[series.name()]['y']) < self.num_data_points():
-                    self.data_dict[series.name()]['x'].append(self.x_axis(signal))
-                    self.data_dict[series.name()]['y'].append(series.y_axis(signal))
+                if len(self.data_dict[series.name()]['y']) \
+                        < self.num_data_points():
+                    self.data_dict[series.name()]['x'].append(
+                        self.x_axis(signal))
+                    self.data_dict[series.name()]['y'].append(
+                        series.y_axis(signal))
                 else:
-                    self.data_dict[series.name()]['x'].append(self.x_axis(signal))
-                    self.data_dict[series.name()]['y'].append(series.y_axis(signal))
-                    self.data_dict[series.name()]['x'] = self.data_dict[series.name()]['x'][1:]
-                    self.data_dict[series.name()]['y'] = self.data_dict[series.name()]['y'][1:]
+                    self.data_dict[series.name()]['x'].append(
+                        self.x_axis(signal))
+                    self.data_dict[series.name()]['y'].append(
+                        series.y_axis(signal))
+                    self.data_dict[series.name()]['x'] = \
+                        self.data_dict[series.name()]['x'][1:]
+                    self.data_dict[series.name()]['y'] = \
+                        self.data_dict[series.name()]['y'][1:]
         self.data = self.data_dict_to_data_list(self.data_dict)
 
     @staticmethod
