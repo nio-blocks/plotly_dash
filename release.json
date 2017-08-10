@@ -1,7 +1,7 @@
 {
-  "namespace/BlockName": {
-    "Language": "<language>",
-    "Reference": "github.com/<organization>/<repo>@v1.0.0",
-    "Version": "1.0.0"
+  "nio/PlotlyDash": {
+    "language": "Python",
+    "reference": "git@github.com:cowleyk/plotly_dash.git@v0.1.0",
+    "version": "0.1.0"
   }
 }
