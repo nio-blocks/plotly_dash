@@ -10,7 +10,8 @@ from nio.util.threading.spawn import spawn
 
 
 class Series(PropertyHolder):
-    y_axis = FloatProperty(
+    # make into a 'Property'
+    y_axis = Property(
         title='Dependent Variable', default='{{ $y_data }}', allow_none=False)
     name = StringProperty(
         title='Series Name', default='default name', allow_none=False)
@@ -28,6 +29,7 @@ class PlotlyDash(Block):
         title='Title', default='Plotly Title', allow_none=False)
     num_data_points = IntProperty(
         title='How many points to display', default=20, allow_none=True)
+    port = IntProperty(title='Port', default=8050)
 
     def __init__(self):
         self._main_thread = None
@@ -73,6 +75,7 @@ class PlotlyDash(Block):
         # append new signal data to the proper dict key
         for signal in signals:
             for series in self.graph_series():
+                # if y_data is a list, plot list rather than append()
                 if len(self.data_dict[series.name()]['y']) \
                         < self.num_data_points():
                     self.data_dict[series.name()]['x'].append(
@@ -96,4 +99,4 @@ class PlotlyDash(Block):
 
     def _server(self):
         self.app.layout = html.Div()
-        self.app.run_server(debug=False)
+        self.app.run_server(debug=False, port=self.port(), host='0.0.0.0')
