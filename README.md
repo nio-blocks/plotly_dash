@@ -4,6 +4,8 @@ Create webserver and plot data series using Plot.ly-Dash on a locally hosted web
 
 Plot multiple lines on the same graph, and take advantage of all of Plot.ly's built in browser interactivity.
 
+*Known bug*: Race condition exists during service start.  It's possible that graph is not full built by the time a signal is received, in which case the signal will not be plotted.  Make sure the block has fully started before calling process_signals.
+
 Properties
 ----------
 - **graph_series**: Lines to plot on the graph. Supply a dependent (y-axis) variable and name per line.
