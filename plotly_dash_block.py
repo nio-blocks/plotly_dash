@@ -76,21 +76,26 @@ class PlotlyDash(Block):
         for signal in signals:
             for series in self.graph_series():
                 # if y_data is a list, plot list rather than append()
-                if len(self.data_dict[series.name()]['y']) \
-                        < self.num_data_points():
-                    self.data_dict[series.name()]['x'].append(
-                        self.x_axis(signal))
-                    self.data_dict[series.name()]['y'].append(
-                        series.y_axis(signal))
+                if not isinstance(self.x_axis(signal), []):
+                    if len(self.data_dict[series.name()]['y']) \
+                            < self.num_data_points():
+                        self.data_dict[series.name()]['x'].append(
+                            self.x_axis(signal))
+                        self.data_dict[series.name()]['y'].append(
+                            series.y_axis(signal))
+                    else:
+                        self.data_dict[series.name()]['x'].append(
+                            self.x_axis(signal))
+                        self.data_dict[series.name()]['y'].append(
+                            series.y_axis(signal))
+                        self.data_dict[series.name()]['x'] = \
+                            self.data_dict[series.name()]['x'][1:]
+                        self.data_dict[series.name()]['y'] = \
+                            self.data_dict[series.name()]['y'][1:]
                 else:
-                    self.data_dict[series.name()]['x'].append(
-                        self.x_axis(signal))
-                    self.data_dict[series.name()]['y'].append(
-                        series.y_axis(signal))
-                    self.data_dict[series.name()]['x'] = \
-                        self.data_dict[series.name()]['x'][1:]
-                    self.data_dict[series.name()]['y'] = \
-                        self.data_dict[series.name()]['y'][1:]
+                    self.data_dict[series.name()]['x'] = self.x_axis(signal)
+                    self.data_dict[series.name()]['y'] = series.y_axis(signal)
+
         self.data = self.data_dict_to_data_list(self.data_dict)
 
     @staticmethod
