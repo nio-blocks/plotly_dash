@@ -2,7 +2,6 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import requests
-from time import sleep
 from flask import request
 from dash.dependencies import Output, Event
 
@@ -41,14 +40,17 @@ class PlotlyDash(Block):
         self.data = []
         super().__init__()
 
-    def start(self):
-        self._main_thread = spawn(self._server)
-        self.logger.debug('server started on localhost:{}'.format(self.port()))
-
+    def configure(self, context):
+        super().configure(context)
         self.data_dict = {
             s.name(): {'x': [], 'y': [], 'name': s.name()}
             for s in self.graph_series()
         }
+
+    def start(self):
+        self._main_thread = spawn(self._server)
+        self.logger.debug('server started on localhost:{}'.format(self.port()))
+
         self.data = self.data_dict_to_data_list(self.data_dict)
         figure = {'data': self.data, 'layout': {'title': self.title()}}
         app_layout = [
@@ -73,7 +75,6 @@ class PlotlyDash(Block):
             if func is None:
                 self.logger.warning('Not running with the Werkzeug Server')
             func()
-        sleep(0.25)
         super().start()
 
 
