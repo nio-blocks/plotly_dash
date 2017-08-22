@@ -76,7 +76,7 @@ class PlotlyDash(Block):
         for signal in signals:
             for series in self.graph_series():
                 # if y_data is a list, plot list rather than append()
-                if not isinstance(self.x_axis(signal), []):
+                if not isinstance(self.x_axis(signal), list):
                     if len(self.data_dict[series.name()]['y']) \
                             < self.num_data_points():
                         self.data_dict[series.name()]['x'].append(
