@@ -2,6 +2,9 @@
   "nio/PlotlyDash": {
     "version": "0.1.0",
     "description": "Create webserver and plot data series using Plot.ly-Dash on a locally hosted webpage.",
+    "categories": [
+      "Graphics"
+    ],
     "properties": {
       "graph_series": {
         "title": "Data Series",
