@@ -12,6 +12,7 @@ from nio.util.threading.spawn import spawn
 
 
 class Series(PropertyHolder):
+    kwargs = Property(title='Keyword Args', default='{{ {} }}')
     y_axis = Property(
         title='Dependent Variable', default='{{ $y_data }}', allow_none=False)
     name = StringProperty(
@@ -31,6 +32,7 @@ class PlotlyDash(Block):
     num_data_points = IntProperty(
         title='How many points to display', default=20, allow_none=True)
     port = IntProperty(title='Port', default=8050)
+    update_interval = IntProperty(title='Update Interval (seconds)', default=1)
 
     def __init__(self):
         self._main_thread = None
@@ -55,7 +57,7 @@ class PlotlyDash(Block):
         figure = {'data': self.data, 'layout': {'title': self.title()}}
         app_layout = [
             dcc.Graph(id=self.title(), figure=figure),
-            dcc.Interval(id='interval-component', interval=1 * 1000)
+            dcc.Interval(id='interval-component', interval=self.update_interval() * 1000)
         ]
 
         self.app.layout = html.Div(app_layout)
@@ -107,6 +109,9 @@ class PlotlyDash(Block):
                             self.x_axis(signal))
                         self.data_dict[series.name()]['y'].append(
                             series.y_axis(signal))
+                        for arg in series.kwargs():
+                            self.data_dict[series.name()][arg] = \
+                            series.kwargs()[arg]
                     else:
                         self.data_dict[series.name()]['x'].append(
                             self.x_axis(signal))
@@ -116,9 +121,14 @@ class PlotlyDash(Block):
                             self.data_dict[series.name()]['x'][1:]
                         self.data_dict[series.name()]['y'] = \
                             self.data_dict[series.name()]['y'][1:]
+                        for arg in series.kwargs():
+                            self.data_dict[series.name()][arg] = \
+                            series.kwargs()[arg]
                 else:
                     self.data_dict[series.name()]['x'] = self.x_axis(signal)
                     self.data_dict[series.name()]['y'] = series.y_axis(signal)
+                    for arg in series.kwargs():
+                        self.data_dict[series.name()][arg] = series.kwargs()[arg]
 
         self.data = self.data_dict_to_data_list(self.data_dict)
 
