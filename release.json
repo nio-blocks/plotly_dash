@@ -1,7 +1,7 @@
 {
   "nio/PlotlyDash": {
     "language": "Python",
-    "version": "0.1.0",
-    "url": "git://github.com/cowleyk/plotly_dash.git"
+    "url": "git://github.com/nio-blocks/plotly_dash.git",
+    "version": "0.1.0"
   }
 }
