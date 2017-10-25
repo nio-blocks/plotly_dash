@@ -20,7 +20,7 @@ class Series(PropertyHolder):
 
 class PlotlyDash(Block):
 
-    version = VersionProperty('0.1.0')
+    version = VersionProperty("0.1.1")
     graph_series = ListProperty(Series, title='Data Series', default=[])
     x_axis = Property(
         title='Independent Variable',
