@@ -11,6 +11,7 @@ from nio.properties import VersionProperty, FloatProperty, Property, \
 from nio.util.threading.spawn import spawn
 
 
+
 class Series(PropertyHolder):
     kwargs = Property(title='Keyword Args', default='{{ {} }}')
     y_axis = Property(
@@ -18,9 +19,7 @@ class Series(PropertyHolder):
     name = StringProperty(
         title='Series Name', default='default name', allow_none=False)
 
-class PlotlyDash(Block):
-
-    version = VersionProperty("0.1.1")
+class Graph(PropertyHolder):
     graph_series = ListProperty(Series, title='Data Series', default=[])
     x_axis = Property(
         title='Independent Variable',
@@ -31,6 +30,11 @@ class PlotlyDash(Block):
         title='Title', default='Plotly Title', allow_none=False)
     num_data_points = IntProperty(
         title='How many points to display', default=20, allow_none=True)
+
+class PlotlyDash(Block):
+
+    graphs = ListProperty(Graph, title='Graph', default=[])
+    version = VersionProperty("0.1.1")
     port = IntProperty(title='Port', default=8050)
     update_interval = IntProperty(title='Update Interval (seconds)', default=1)
 

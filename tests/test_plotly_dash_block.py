@@ -18,11 +18,13 @@ class TestExample(NIOBlockTestCase):
         mock_graph.side_effect = graph_instances
         blk = PlotlyDash()
         self.configure_block(blk, {
-            'graph_series': [{
-                'y_axis': '{{ $y_data }}',
-                'name': 'series name'
-            }],
-            'x_axis': '{{ $x_data }}'
+            'graphs': [{
+                'graph_series': [{
+                    'y_axis': '{{ $y_data }}',
+                    'name': 'series name'
+                }],
+                'x_axis': '{{ $x_data }}'
+            }]
         })
         blk.start()
         blk.process_signals(input_signal1)
