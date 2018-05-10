@@ -6,7 +6,7 @@ Plot multiple lines on the same graph, and take advantage of all of Plot.ly's bu
 
 *Known bug*: Race condition exists during service start.  It's possible that graph is not full built by the time a signal is received, in which case the signal will not be plotted.  Make sure the block has fully started before calling process_signals.
 
-*Note*: Plotly is not supported in Internet Explorer
+*Note*: Plotly is not supported in Internet Explorer.
 
 Properties
 ----------
