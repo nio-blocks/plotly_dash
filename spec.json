@@ -18,11 +18,23 @@
         "description": "How many previous data points will be displayed on the graph.",
         "default": 20
       },
+      "port": {
+        "title": "Port",
+        "type": "IntType",
+        "description": "Port on which to run the local webserver.",
+        "default": 8050
+      },
       "title": {
         "title": "Title",
         "type": "StringType",
         "description": "The graph's title.",
         "default": "Plotly Title"
+      },
+      "update_interval": {
+        "title": "Update Interval (seconds)",
+        "type": "IntType",
+        "description": "How often to update the graph.",
+        "default": 1
       },
       "x_axis": {
         "title": "Independent Variable",
@@ -36,11 +48,7 @@
         "description": "Any list of signals containing data to be plotted."
       }
     },
-    "outputs": {
-      "default": {
-        "description": ""
-      }
-    },
+    "outputs": {},
     "commands": {}
   }
 }

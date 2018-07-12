@@ -8,10 +8,12 @@ Plot multiple lines on the same graph, and take advantage of all of Plot.ly's bu
 
 Properties
 ----------
-- **graph_series**: Lines to plot on the graph. Supply a dependent (y-axis) variable and name per line.
+- **graph_series**: Lines to plot on the graph. Supply a dependent (Y-axis) variable and name per line.
 - **num_data_points**: How many previous data points will be displayed on the graph.
-- **title**: The graph's title
-- **x_axis**: The independent (x-axis) variable.
+- **port**: Port on which to run the local webserver.
+- **title**: The graph's title.
+- **update_interval**: How often to update the graph.
+- **x_axis**: The independent (X-axis) variable.
 
 Inputs
 ------
@@ -19,9 +21,11 @@ Inputs
 
 Outputs
 -------
+None
 
 Commands
 --------
+None
 
 Dependencies
 ------------

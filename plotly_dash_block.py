@@ -5,7 +5,7 @@ import requests
 from flask import request
 from dash.dependencies import Output, Event
 
-from nio.block.base import Block
+from nio import TerminatorBlock
 from nio.properties import VersionProperty, FloatProperty, Property, \
     StringProperty, IntProperty, PropertyHolder, ListProperty
 from nio.util.threading.spawn import spawn
@@ -18,7 +18,7 @@ class Series(PropertyHolder):
     name = StringProperty(
         title='Series Name', default='default name', allow_none=False)
 
-class PlotlyDash(Block):
+class PlotlyDash(TerminatorBlock):
 
     version = VersionProperty("0.1.1")
     graph_series = ListProperty(Series, title='Data Series', default=[])
